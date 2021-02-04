@@ -1,47 +1,59 @@
 import Container from '@material-ui/core/Container';
-import {Button, Typography, Dialog, DialogTitle} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import Mokkivalinta from "./components/Mokkivalinta";
 import Liuku from "./components/Liuku";
 import Siivous from "./components/Siivous";
 import Varaaja from "./components/Varaaja";
 import Loppusumma from "./components/Loppusumma";
+import Nappi from "./components/Nappi";
+import Nimi from "./components/Nimi";
 import {useState, useEffect} from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 
+
+const useStyles = makeStyles({
+  temps : { flexGrow : 1
+  },
+
+});
 
 function App() {
 
-  //for Mokkivalinta
-  const [mokki, setMokki] = useState(0);
+  const tyylit = useStyles();
+
+  
+  const [mokki, setMokki] = useState(180); //for Mokkivalinta
+  const [vuorokaudet, setVuorokaudet] = useState(1); //for Liuku
+  const[siivottu, setSiivottu] = useState(true);//for Siivous
+  const [selectedDate, handleDateChange] = useState(new Date());   //for Varaaja
+  const [nimi, setNimi] = useState("");   //for Varaaja
+  const [summa, setSumma] = useState(0);   //for all
+  const [open, setOpen] = useState(false);   //for Loppusumma
+
 
   function handleMokkiChange (e){
     setMokki(e.target.value);
   }
 
-  //for Liuku
-  const [vuorokaudet, setVuorokaudet] = useState(1);
-
   function handleLiukuChange(val){
     setVuorokaudet(val);  
   }
 
-  //for Siivous
-  const[siivottu, setSiivottu] = useState(true);
+
 
   function muuta() {
     setSiivottu(!siivottu);
   }
 
-  //for Varaaja
-  const [selectedDate, handleDateChange] = useState(new Date());
-  const [nimi, setNimi] = useState("");
+
 
   function nameChange(e){
       setNimi(e.target.value);
   }
 
-  //for all
-  const [summa, setSumma] = useState(0);
+
 
   function addAll() {
     let sum = mokki * vuorokaudet;
@@ -53,9 +65,7 @@ function App() {
     setSumma(sum);
   }
 
-  //for Loppusumma
 
-  const [open, setOpen] = useState(false);
 
   function handleOpen(){
     setOpen(!open);
@@ -69,35 +79,50 @@ function App() {
 
 
   return (
-    <Container>
-      <Typography variant="h3" align='center'>Lomamökkivaraus</Typography>
-      <Mokkivalinta 
-        mokki={mokki} 
-        setMokki={setMokki} 
-        handleMokkiChange={handleMokkiChange}/>
-      <Liuku  
-        handleLiukuChange={handleLiukuChange}/>
-      <Siivous 
-        siivottu={siivottu} 
-        muuta={muuta}/>
-      <Varaaja 
-        selectedDate={selectedDate} 
-        handleDateChange={handleDateChange} 
-        nameChange={nameChange}/>
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleOpen}>
-        Varaa Mökki
-      </Button>
-      <Typography>Kokonaissumma: {summa}€</Typography>
-      <Loppusumma 
-        open={open} 
-        handleOpen={handleOpen} 
-        summa={summa} 
-        nimi={nimi} 
-        selectedDate={selectedDate}/>
-    </Container>
+      <Container>
+      <div className={tyylit.temps}>
+        <Typography variant="h3" align='center'>Lomamökkivaraus</Typography>
+        <Grid container justify="center" alignItems="center">                    
+          <Grid item xs={12} >
+            <Mokkivalinta 
+              mokki={mokki} 
+              setMokki={setMokki} 
+              handleMokkiChange={handleMokkiChange}/>
+          </Grid>
+          <Grid item xs={9}>
+            <Liuku  
+              handleLiukuChange={handleLiukuChange}
+              tyylit={tyylit}
+              />
+          </Grid>
+          <Grid item xs={12}>
+            <Nimi nameChange={nameChange}/>
+          </Grid>
+          <Grid item xs={12} >
+            <Varaaja 
+              selectedDate={selectedDate} 
+              handleDateChange={handleDateChange} 
+              />
+          </Grid>
+          <Grid item xs={4}>
+            <Siivous 
+              siivottu={siivottu} 
+              muuta={muuta}/>
+          </Grid>
+          <Grid item xs={12} >
+            <Nappi handleOpen={handleOpen}/>
+          </Grid>
+          <Typography>Kokonaissumma: {summa}€</Typography>
+          <Loppusumma 
+            open={open} 
+            handleOpen={handleOpen} 
+            summa={summa} 
+            nimi={nimi} 
+            selectedDate={selectedDate}/>
+          </Grid>
+      </div>
+      </Container>
+    
   );
 }
 

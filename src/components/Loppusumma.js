@@ -3,7 +3,6 @@
 
   function Loppusumma(props){
 
-    console.log(props.selectedDate);
 
     let apuAika = props.selectedDate.toLocaleDateString("fi-FI");
     return(

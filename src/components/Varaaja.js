@@ -1,10 +1,20 @@
-import {TextField} from "@material-ui/core";
+
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { useState } from "react";
 import DateFnsUtils from '@date-io/date-fns';
 import format from "date-fns/format";
 import fiLocale from "date-fns/locale/fi";
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
 
+
+const useStyles = makeStyles( { 
+    comps : {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      margin : "20px"
+    }
+})
 
 class LocalizedUtils extends DateFnsUtils {
     getDatePickerHeaderText(date) {
@@ -14,20 +24,18 @@ class LocalizedUtils extends DateFnsUtils {
 
 function Varaaja (props) {
 
-
+    const tyyli = useStyles();
 
     return(
-        <>
-        <TextField id="standard-basic"
-            label="Nimi"
-            onChange={(e) => {props.nameChange(e)}} />
-        <MuiPickersUtilsProvider utils={LocalizedUtils} locale={fiLocale}>
-        <DatePicker 
-            value={props.selectedDate} 
-            onChange={props.handleDateChange}
-            disablePast/>
-        </MuiPickersUtilsProvider>
-        </>
+        <Box className={tyyli.comps}>
+            <MuiPickersUtilsProvider utils={LocalizedUtils} locale={fiLocale}>
+            <DatePicker
+                label="Saapumispäivä" 
+                value={props.selectedDate} 
+                onChange={props.handleDateChange}
+                disablePast/>
+            </MuiPickersUtilsProvider>
+        </Box>
     )
 }
 
